@@ -1,9 +1,11 @@
 # Прогрес
 
 ## Зроблено
-- Прочитано `PERSONA.md`, `AGENTS.md` і виписку `data/statement.csv`.
-- Зафіксовано домовленості: `PRD.md`, `IMPLEMENTATION_PLAN.md`, розділ «Проєкт» в `AGENTS.md`.
-- Стартові файли воркшопу вже є: `rules.csv` (частина категорій), середовище через uv. Коду обліку ще немає.
+- Документи: `PRD.md`, `IMPLEMENTATION_PLAN.md`, розділ «Проєкт» в `AGENTS.md`.
+- Каркас обліку: `main.beancount` (рахунки, 4 500 PLN на 31.07.2026, `include`).
+- Імпорт: `import.py` читає CSV з `data/` і `rules.csv`, перезаписує `transactions.beancount` у порядку банку, ставить `balance` на кінець кожного місяця.
+- Перевірка: `uv run python import.py`, потім `uv run bean-check main.beancount` — без повідомлень. Залишок збігається з банком (15.10.2026: 17 127,34 PLN).
+- Без категорії (правил ще немає): Rossmann (2), Play — abonament (2), Decathlon (2).
 
 ## Далі
-Крок 1 плану: каркас `main.beancount` (опції, рахунки, початковий залишок 4 500 PLN, `include`).
+Крок 2 плану: дописати в `rules.csv` Play, Rossmann і Decathlon, знову імпортувати й перевірити, що `Expenses:Без-Категорії` порожня.
