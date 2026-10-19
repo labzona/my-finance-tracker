@@ -3,3 +3,10 @@ transactions.becount
 report.html
 .venv/
 __pycache__/
+
+# Generated financial files
+/data/
+/transactions.beancount
+/report.html
+/.venv/
+__pycache__/
