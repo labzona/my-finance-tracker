@@ -24,13 +24,37 @@ option "operating_currency" "PLN"
 include "transactions.beancount"
 
 2026-10-16 query "1 Витрати за категоріями" "
-SELECT year, month, account, sum(position)
-WHERE account ~ 'Expenses'
+SELECT year, month, account, sum(number) AS expenses_pln
+WHERE account ~ '^Expenses:'
 GROUP BY year, month, account
+ORDER BY year, month, account
 "
 
-2026-10-16 query "2 Заощадження за місяцями" "
-SELECT year, month, -sum(position) AS savings
-WHERE account ~ 'Income|Expenses'
+; Календарні запити за окремим проханням Олі; жовтень неповний.
+2026-10-16 query "2 Норма заощаджень" "
+SELECT year, month,
+  -sum(number * int(account ~ '^Income:')) AS income_pln,
+  sum(number * int(account ~ '^Expenses:')) AS expenses_pln,
+  -sum(number) AS saved_pln,
+  round(100 * sum(number) / sum(number * int(account ~ '^Income:')), 2) AS savings_percent,
+  max(date) AS last_operation
+WHERE account ~ '^(Income|Expenses):'
 GROUP BY year, month
+ORDER BY year, month
+"
+
+2026-10-16 query "3 Фіксовані і змінні" "
+SELECT year, month,
+  sum(number * int('fixed' IN tags)) AS fixed_pln,
+  sum(number * int(NOT ('fixed' IN tags))) AS variable_pln,
+  sum(number) AS total_pln
+WHERE account ~ '^Expenses:'
+GROUP BY year, month
+ORDER BY year, month
+"
+
+2026-10-16 query "4 Без категорії" "
+SELECT year, month, date, narration, number AS expenses_pln
+WHERE account = 'Expenses:Без-Категорії'
+ORDER BY year, month, date
 "
