@@ -1,3 +1,4 @@
+; Усі рахунки обліку; операції генерує import.py з CSV і rules.csv.
 option "title" "Оля"
 option "operating_currency" "PLN"
 

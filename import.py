@@ -35,7 +35,9 @@ def match_rule(
 ) -> tuple[str, bool]:
     haystack = description.casefold()
     for pattern, account, fixed in rules:
-        if pattern.casefold() in haystack:
+        if pattern.casefold() in haystack and (
+            amount <= 0 or account.startswith("Income:")
+        ):
             return account, fixed
     if amount > 0:
         return OTHER_INCOME, False
@@ -62,7 +64,7 @@ def load_rows() -> list[dict]:
                 description = raw["Description"].strip()
                 amount = raw["Amount"].strip()
                 balance = raw["Balance"].strip()
-                key = (completed[:10], description, amount, balance)
+                key = (completed, description, amount, balance)
                 if key in seen:
                     continue
                 seen.add(key)
@@ -114,11 +116,12 @@ def write_ledger(rows: list[dict], rules: list[tuple[str, str, bool]]) -> None:
         chunks.append(
             render_transaction(date_str, description, amount, currency, account, fixed)
         )
-        last_by_month[(completed.year, completed.month)] = (
-            completed,
-            balance,
-            currency,
-        )
+        month = (completed.year, completed.month)
+        previous = last_by_month.get(month)
+        # Файли можуть перекриватися. Раніша дата не замінює кінець місяця;
+        # усередині дня перемагає останній рядок банку, а не пізніший час.
+        if previous is None or completed.date() >= previous[0].date():
+            last_by_month[month] = (completed, balance, currency)
 
     if last_by_month:
         months = sorted(last_by_month)
