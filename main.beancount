@@ -21,3 +21,15 @@ option "operating_currency" "PLN"
   Equity:Початковий-Залишок      -4500.00 PLN
 
 include "transactions.beancount"
+
+2026-10-16 query "1 Витрати за категоріями" "
+SELECT year, month, account, sum(position)
+WHERE account ~ 'Expenses'
+GROUP BY year, month, account
+"
+
+2026-10-16 query "2 Заощадження за місяцями" "
+SELECT year, month, -sum(position) AS savings
+WHERE account ~ 'Income|Expenses'
+GROUP BY year, month
+"
