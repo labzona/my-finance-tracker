@@ -134,7 +134,7 @@ def table(parent, node):
             el(cp, 'tcW', w=widths[i], type='dxa')
             el(cp, 'vAlign', val='center')
             if header:
-                el(cp, 'shd', fill='EDF3EF', val='clear')
+                el(cp, 'shd', fill='E8EEF4', val='clear')
             paragraph(tc, cell, cell=True, header=header)
 
 
@@ -169,16 +169,16 @@ defaults = el(styles, 'docDefaults')
 rd = el(el(defaults, 'rPrDefault'), 'rPr')
 el(rd, 'rFonts', ascii='Arial', hAnsi='Arial', eastAsia='Arial', cs='Arial')
 el(rd, 'lang', val='uk-UA')
-el(rd, 'sz', val=19)
-el(rd, 'color', val='17201C')
+el(rd, 'sz', val=20)
+el(rd, 'color', val='000000')
 for sid, name, size, before, after, bold in [
-    ('Normal', 'Normal', 19, 0, 100, False),
-    ('Title', 'Title', 46, 0, 180, True),
+    ('Normal', 'Normal', 20, 0, 90, False),
+    ('Title', 'Title', 42, 0, 150, True),
     ('Heading1', 'heading 1', 30, 90, 100, True),
     ('Heading2', 'heading 2', 21, 130, 70, True),
-    ('SmallText', 'Small Text', 17, 0, 90, False),
-    ('TableText', 'Table Text', 17, 0, 0, False),
-    ('TableHeader', 'Table Header', 16, 0, 0, True),
+    ('SmallText', 'Small Text', 18, 0, 80, False),
+    ('TableText', 'Table Text', 18, 0, 0, False),
+    ('TableHeader', 'Table Header', 18, 0, 0, True),
 ]:
     s = el(styles, 'style', type='paragraph', styleId=sid)
     if sid == 'Normal':
@@ -223,4 +223,4 @@ ET.SubElement(rootrels, 'Relationship', Id='document', Type=R + '/officeDocument
 with ZipFile(ROOT / 'product-decision.docx', 'w', ZIP_DEFLATED) as out:
     for name, node in [('[Content_Types].xml', types), ('_rels/.rels', rootrels), ('word/document.xml', doc), ('word/styles.xml', styles), ('word/_rels/document.xml.rels', rels), ('word/footer1.xml', footer)]:
         out.writestr(name, xml(node))
-print('Created homework/product-decision.docx: editable text, 6 tables, 5 planned pages.')
+print(f'Created homework/product-decision.docx: editable text, {len(list(descendants(parser.root, "table")))} tables, 5 planned pages.')

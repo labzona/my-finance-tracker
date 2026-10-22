@@ -89,8 +89,9 @@ try {
     throw new Error('Content too close to footer: ' + JSON.stringify(pages));
   }
   const featureIds = pages.flatMap(page => page.featureIds);
-  if (featureIds.length !== 18 || new Set(featureIds).size !== 18 ||
-      featureIds.some(id => id < 1 || id > 18)) throw new Error('Invalid feature coverage');
+  const expectedIds = [...Array(18)].map((_, i) => i + 1).concat(21);
+  if (featureIds.length !== expectedIds.length || new Set(featureIds).size !== expectedIds.length ||
+      expectedIds.some(id => !featureIds.includes(id))) throw new Error('Invalid feature coverage');
   const result = await call('Page.printToPDF', {
     preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false,
     scale: 1, transferMode: 'ReturnAsBase64',
