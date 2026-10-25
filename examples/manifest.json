@@ -1,0 +1,7 @@
+{
+  "dataset": "Штучні виписки з домашнього завдання WIT 5, заняття 7",
+  "files": {
+    "ola-statement.csv": "sha256:e138eb4147c16176053f7abc3b0cd8ed86d013b3208563e1f349a15bfbf5cdf7",
+    "marko-statement.csv": "sha256:0d31c2d18f2b46ea2e6189ba9145b0b23e8837cf3a23b4ff71ac8de0fb9182fc"
+  }
+}

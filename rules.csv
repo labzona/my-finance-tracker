@@ -1,14 +1,20 @@
 шаблон,рахунок,фіксована
 Rent,Expenses:Житло,так
 Salary,Income:Зарплата,ні
+Northwind Logistics,Income:Зарплата,ні
 Biedronka,Expenses:Продукти,ні
 Lidl,Expenses:Продукти,ні
 Żabka,Expenses:Продукти,ні
 Carrefour,Expenses:Продукти,ні
+Kaufland,Expenses:Продукти,ні
+Auchan,Expenses:Продукти,ні
 Bar Mleczny,Expenses:Кафе,ні
 Starbucks,Expenses:Кафе,ні
+Costa Coffee,Expenses:Кафе,ні
+Manekin,Expenses:Кафе,ні
 Bolt Food,Expenses:Доставка-Їжі,ні
 Wolt,Expenses:Доставка-Їжі,ні
+PYSZNE.PL,Expenses:Доставка-Їжі,ні
 Bolt,Expenses:Транспорт,ні
 Uber,Expenses:Транспорт,ні
 ZTM,Expenses:Транспорт,так
@@ -18,3 +24,10 @@ Claude.ai,Expenses:Підписки,так
 Rossmann,Expenses:Косметика-і-Побут,ні
 Play,Expenses:Звязок,так
 Decathlon,Expenses:Спорт,ні
+Orange,Expenses:Звязок,так
+PGE,Expenses:Комунальні,так
+Zdrofit,Expenses:Спорт,так
+YouTube Premium,Expenses:Підписки,так
+Super-Pharm,Expenses:Косметика-і-Побут,ні
+Allegro,Expenses:Покупки,ні
+Steamgames,Expenses:Розваги,ні

@@ -3,6 +3,7 @@ option "title" "Оля"
 option "operating_currency" "PLN"
 
 2026-07-31 open Assets:Банк PLN
+2026-07-31 open Assets:Банк-Марко PLN
 2026-07-31 open Equity:Початковий-Залишок PLN
 2026-07-31 open Income:Зарплата PLN
 2026-07-31 open Income:Інше PLN
@@ -16,16 +17,23 @@ option "operating_currency" "PLN"
 2026-07-31 open Expenses:Косметика-і-Побут PLN
 2026-07-31 open Expenses:Спорт PLN
 2026-07-31 open Expenses:Без-Категорії PLN
+2026-07-31 open Expenses:Комунальні PLN
+2026-07-31 open Expenses:Покупки PLN
+2026-07-31 open Expenses:Розваги PLN
 
 2026-07-31 * "Початковий залишок"
   Assets:Банк                     4500.00 PLN
   Equity:Початковий-Залишок      -4500.00 PLN
 
+2026-07-31 * "Початковий залишок Марка"
+  Assets:Банк-Марко               2860.40 PLN
+  Equity:Початковий-Залишок       -2860.40 PLN
+
 include "transactions.beancount"
 
 2026-10-16 query "1 Витрати за категоріями" "
 SELECT year, month, account, sum(number) AS expenses_pln
-WHERE account ~ '^Expenses:'
+WHERE account ~ '^Expenses:' AND 'ola' IN tags
 GROUP BY year, month, account
 ORDER BY year, month, account
 "
@@ -38,7 +46,7 @@ SELECT year, month,
   -sum(number) AS saved_pln,
   round(100 * sum(number) / sum(number * int(account ~ '^Income:')), 2) AS savings_percent,
   max(date) AS last_operation
-WHERE account ~ '^(Income|Expenses):'
+WHERE account ~ '^(Income|Expenses):' AND 'ola' IN tags
 GROUP BY year, month
 ORDER BY year, month
 "
@@ -48,13 +56,13 @@ SELECT year, month,
   sum(number * int('fixed' IN tags)) AS fixed_pln,
   sum(number * int(NOT ('fixed' IN tags))) AS variable_pln,
   sum(number) AS total_pln
-WHERE account ~ '^Expenses:'
+WHERE account ~ '^Expenses:' AND 'ola' IN tags
 GROUP BY year, month
 ORDER BY year, month
 "
 
 2026-10-16 query "4 Без категорії" "
 SELECT year, month, date, narration, number AS expenses_pln
-WHERE account = 'Expenses:Без-Категорії'
+WHERE account = 'Expenses:Без-Категорії' AND 'ola' IN tags
 ORDER BY year, month, date
 "

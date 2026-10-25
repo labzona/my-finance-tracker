@@ -1,0 +1,2 @@
+# Keep the original educational bank exports byte-for-byte, including CRLF.
+examples/*.csv -text whitespace=cr-at-eol

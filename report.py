@@ -15,8 +15,10 @@ from beancount.core.data import Query
 ROOT = Path(__file__).resolve().parent
 
 
-def load_report() -> list[dict]:
-    entries, errors, options = loader.load_file(str(ROOT / "main.beancount"))
+def load_report(owner: str = "ola", ledger_path: Path | None = None) -> list[dict]:
+    if owner not in {"ola", "marko"}:
+        raise ValueError("Невідомий власник звіту")
+    entries, errors, options = loader.load_file(str(ledger_path or ROOT / "main.beancount"))
     if errors:
         raise ValueError(f"Облік має помилки: {errors}")
     connection = beanquery.connect(
@@ -27,7 +29,8 @@ def load_report() -> list[dict]:
         queries = [e for e in entries if isinstance(e, Query) and e.name.startswith(prefix)]
         if len(queries) != 1:
             raise ValueError(f"Очікується один збережений запит з префіксом {prefix!r}")
-        cursor = connection.execute(queries[0].query_string)
+        query = queries[0].query_string.replace("'ola' IN tags", f"'{owner}' IN tags")
+        cursor = connection.execute(query)
         columns = [column.name for column in cursor.description]
         results[prefix] = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
