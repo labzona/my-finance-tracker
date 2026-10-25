@@ -1,0 +1,8 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Вхід до фінансового трекера</title><link rel="stylesheet" href="/webstatic/tracker.css">
+<main class="login"><h1>Фінансовий трекер</h1><p>Увійди у свій обліковий запис.</p>
+{% if error %}<p role="alert">{{ error }}</p>{% endif %}
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}">
+<label>Логін<input name="username" autocomplete="username" maxlength="80" required></label>
+<label>Пароль<input type="password" name="password" autocomplete="current-password" maxlength="200" required></label>
+<button type="submit">Увійти</button></form></main></html>

@@ -6,3 +6,12 @@ report.html
 # Службові файли Python
 .venv/
 __pycache__/
+
+# Persistent cash, sessions, generated private books and secrets.
+runtime/
+.env
+.env.*
+!.env.example
+*.sqlite3
+*.sqlite3-journal
+outputs/tracker-deploy.zip

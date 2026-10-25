@@ -1,0 +1,23 @@
+{% set v = extension.view() %}{% set m = v.selected %}
+<link rel="stylesheet" href="/webstatic/tracker.css">
+<div class="tracker-report">
+<div class="tracker-top"><h2>{{ v.name }} · місячний звіт</h2><form method="post" action="/logout"><input type="hidden" name="csrf" value="{{ v.csrf }}"><button>Вийти</button></form></div>
+<form method="get" class="tracker-month"><div><label for="tracker-month">Місяць</label><select id="tracker-month" name="month">{% for item in v.months %}{% set key = '%04d-%02d'|format(item.year,item.month) %}<option value="{{ key }}" {% if key == v.key %}selected{% endif %}>{{ key }}</option>{% endfor %}</select></div><button>Показати</button></form>
+<p>Банківські дані до {{ v.coverage.strftime('%d.%m.%Y') }}.{% if v.partial %} <strong>Неповні дані за місяць.</strong>{% endif %}</p>
+<h3>Витрати за категоріями</h3>
+<table><thead><tr><th>Категорія</th><th>PLN</th></tr></thead><tbody>{% for item in m.categories %}<tr><td>{{ item.name }}</td><td>{{ extension.money(item.amount) }}</td></tr>{% endfor %}<tr><th>Разом</th><th>{{ extension.money(m.expenses_pln) }}</th></tr></tbody></table>
+<h3>Заощадження</h3><dl class="tracker-stats"><div><dt>Дохід</dt><dd>{{ extension.money(m.income_pln) }} PLN</dd></div><div><dt>Заощаджено</dt><dd>{{ extension.money(m.saved_pln) }} PLN</dd></div><div><dt>Норма заощаджень</dt><dd>{% if m.savings_percent is not none %}{{ extension.money(m.savings_percent) }}%{% else %}Не визначено: дохід 0{% endif %}</dd></div></dl>
+<h3>Фіксовані та змінні</h3><dl class="tracker-stats"><div><dt>Фіксовані</dt><dd>{{ extension.money(m.fixed_pln) }} PLN</dd></div><div><dt>Змінні, разом</dt><dd>{{ extension.money(m.variable_pln) }} PLN</dd></div><div><dt>З них банківські</dt><dd data-testid="bank-variable">{{ extension.money(v.bank_variable) }} PLN</dd></div><div><dt>З них готівка</dt><dd data-testid="cash-total">{{ extension.money(v.cash_total) }} PLN</dd></div></dl>
+<h3>Додати готівкову витрату</h3>
+<form method="post" action="/cash" class="tracker-cash">
+<input type="hidden" name="csrf" value="{{ v.csrf }}"><input type="hidden" name="nonce" value="{{ v.nonce }}">
+<label>Дата<input type="date" name="date" value="{{ v.today }}" min="2026-08-01" max="{{ v.today }}" required></label>
+<label>Сума, PLN<input name="amount" inputmode="decimal" placeholder="1,00" maxlength="10" required></label>
+<label for="tracker-category">Категорія</label><select id="tracker-category" name="category" required>{% for account in v.categories %}<option value="{{ account }}">{{ account.split(':',1)[1].replace('-',' ') }}</option>{% endfor %}</select>
+<label>Опис<input name="description" maxlength="200" required></label><button type="submit">Зберегти витрату</button>
+</form>
+<p>Готівкові покупки враховуються як змінні. Банківський залишок вони не змінюють. Початкову суму готівки не задано, тому залишок гаманця не звіряємо.</p>
+<h3>Готівкові операції за місяць</h3>
+{% if v.cash %}<ul class="tracker-cash-list">{% for row in v.cash %}<li><time>{{ row.date }}</time> · {{ row.description }} · <strong>{{ extension.cents(row.cents) }} PLN</strong></li>{% endfor %}</ul>{% else %}<p>Готівкових операцій поки немає.</p>{% endif %}
+<p>Звіт показує власні банківські платежі й готівку. Спільні частки 50/50 тут ще не перерозподілені.</p>
+</div>

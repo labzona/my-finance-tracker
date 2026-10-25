@@ -6,6 +6,7 @@ import importlib
 import json
 import subprocess
 import tempfile
+import unittest
 from pathlib import Path
 
 from report import load_report
@@ -56,6 +57,9 @@ def main() -> None:
     print("bean-check: код 0, без повідомлень. Джерела SHA-256 незмінені.")
     for key, value in values.items():
         print(f"{key}: змінні витрати {value:.2f} PLN — OK")
+    suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
+    if not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful():
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
