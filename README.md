@@ -7,6 +7,8 @@ Python / Beancount 3 / Fava. Використовуються лише дві ш
 Потрібні Python 3.12+ та [uv](https://docs.astral.sh/uv/getting-started/installation/). Клонуйте репозиторій або завантажте його код, відкрийте каталог проєкту в терміналі й виконайте:
 
 ```sh
+git clone https://github.com/labzona/my-finance-tracker.git
+cd my-finance-tracker
 uv sync --frozen
 uv run --frozen python verify.py
 ```
